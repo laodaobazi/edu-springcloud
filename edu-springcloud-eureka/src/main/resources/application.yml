@@ -1,0 +1,50 @@
+server:
+  port: 7001
+spring:
+  application:
+    name: spring-cloud-eureka
+  profiles: peer1
+eureka:
+  instance:
+    hostname: peer1
+    instance-id: ${spring.application.name}:${server.port}:@project.version@   #自定义服务名称信息
+    prefer-ip-address: true     #访问路径可以显示IP地址
+  client:
+    serviceUrl:
+      defaultZone: http://peer2:7002/eureka/,http://peer3:7003/eureka/
+    fetch-registry: false
+    register-with-eureka: false
+---
+server:
+  port: 7002
+spring:
+  application:
+    name: spring-cloud-eureka
+  profiles: peer2
+eureka:
+  instance:
+    hostname: peer2
+    instance-id: ${spring.application.name}:${server.port}:@project.version@   #自定义服务名称信息
+    prefer-ip-address: true     #访问路径可以显示IP地址
+  client:
+    serviceUrl:
+      defaultZone: http://peer1:7001/eureka/,http://peer3:7003/eureka/
+    fetch-registry: false
+    register-with-eureka: false
+---
+server:
+  port: 7003
+spring:
+  application:
+    name: spring-cloud-eureka
+  profiles: peer3
+eureka:
+  instance:
+    hostname: peer3
+    instance-id: ${spring.application.name}:${server.port}:@project.version@   #自定义服务名称信息
+    prefer-ip-address: true     #访问路径可以显示IP地址
+  client:
+    serviceUrl:
+      defaultZone: http://peer1:7001/eureka/,http://peer2:7002/eureka/
+    fetch-registry: false
+    register-with-eureka: false #不向注册中心注册自己

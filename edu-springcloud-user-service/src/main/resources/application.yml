@@ -1,0 +1,80 @@
+server:
+  port: 8010
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://peer1:7001/eureka/,http://peer2:7002/eureka/,http://peer3:7003/eureka/
+  instance:
+    instance-id: ${spring.application.name}:${server.port}(@project.version@)   #自定义服务名称信息
+    prefer-ip-address: true     #访问路径可以显示IP地址
+    status-page-url: http://libiao:${server.port}/swagger-ui.html
+    
+spring:
+  application:
+    name: edu-user-service
+  datasource:
+    url:  jdbc:mysql://192.168.136.134:3306/ldbz-shop-product?characterEncoding=utf-8
+    username: root
+    password: LJqWudOdExNV7PGzU9XnRM9SoZ8TnYZFUlKkXvJdZMQIdb+bqrrTplflwADpnVmmY1XlF9bOi5dzO6EtWEvhXw==
+    druid:
+      connection-properties: druid.stat.slowSqlMillis=5000;druid.stat.mergeSql=true;config.decrypt=true;config.decrypt.key=MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAKxivxjC+9mGcKinvHtqClBoQ7HAjIo5ehv0HFZEfoBuFY/ghi9dR4OY1wA5Oj/ZSUL+roqQdKrWHaK/W6anacECAwEAAQ==
+      web-stat-filter:
+        enabled: true
+        url-pattern: /*
+        exclusions: '*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*'
+        session-stat-enable: false
+        session-stat-max-count: 1000
+        principal-session-name: admin
+        principal-cookie-name: admin
+        profile-enable: true
+      stat-view-servlet:
+        enabled: true
+        url-pattern: /druid/*
+        deny: 127.0.1.1
+        allow: 127.0.0.1
+        login-password: 123456
+        login-username: admin
+        reset-enable: true
+      initial-size: 1
+      max-active: 80
+      min-idle: 10
+      pool-prepared-statements: false
+      max-pool-prepared-statement-per-connection-size: 20
+      validation-query: SELECT 'x' 
+      test-on-borrow: false
+      test-on-return: false
+      test-while-idle: true
+      time-between-eviction-runs-millis: 60000
+      min-evictable-idle-time-millis: 300000
+      filters: stat,wall,log4j,config
+      
+mybatis:
+    type-aliases-package: cn.edu.pojo.user
+    mapper-locations: classpath:mapper/*.xml
+
+pagehelper:
+    helperDialect: mysql
+    reasonable: true
+    supportMethodsArguments: true
+    params: count=countSql
+
+
+feign:
+  hystrix:
+    enabled: true
+
+swagger2:
+  package: cn.edu.user.service.impl
+
+redis:
+  cluster: false
+  single-host: 127.0.0.1
+  single-port: 6379
+  password: 
+
+info:
+  app.name: edu-user-service
+  company.name: www.neusoft.com
+  build.artifactId: $project.artifactId$
+  build.version: $project.version$
